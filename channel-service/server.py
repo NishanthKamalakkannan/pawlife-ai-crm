@@ -23,6 +23,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.get("/")
+async def root():
+    return {
+        "service": "PawLife Channel Service",
+        "status": "ok",
+        "health": "/health",
+        "send": "/send",
+    }
+
 class SendRequest(BaseModel):
     message_id: str
     owner_id: str
