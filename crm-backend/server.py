@@ -1,10 +1,12 @@
 import asyncio
 import os
 import logging
+import hashlib
+import hmac
 from datetime import datetime, timezone
 from typing import List, Optional, Dict, Any
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field, ConfigDict
@@ -34,12 +36,18 @@ MONGO_URL = os.getenv("MONGO_URL")
 DB_NAME = os.getenv("DB_NAME", "pawlife")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 CHANNEL_SERVICE_URL = os.getenv("CHANNEL_SERVICE_URL", "http://localhost:8001")
+CALLBACK_SECRET = os.getenv("CALLBACK_SECRET", "")
+ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("ALLOWED_ORIGINS", "*").split(",")
+    if origin.strip()
+]
 
 app = FastAPI(title="PawLife CRM API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS or ["*"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -512,9 +520,19 @@ async def send_campaign(campaign_id: str):
 
 
 @app.post("/api/receipts")
-async def receipt_callback(request: ReceiptRequest):
+async def receipt_callback(receipt: ReceiptRequest, request: Request):
+    if CALLBACK_SECRET:
+        payload = f"{receipt.message_id}.{receipt.status}.{receipt.timestamp}"
+        expected = hmac.new(
+            CALLBACK_SECRET.encode("utf-8"),
+            payload.encode("utf-8"),
+            hashlib.sha256,
+        ).hexdigest()
+        received = request.headers.get("x-callback-signature")
+        if not received or not hmac.compare_digest(received, expected):
+            raise HTTPException(status_code=401, detail="Invalid callback signature")
     try:
-        msg_id = ObjectId(request.message_id)
+        msg_id = ObjectId(receipt.message_id)
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid message_id format")
 
@@ -527,7 +545,7 @@ async def receipt_callback(request: ReceiptRequest):
             return {"success": True}
 
         valid_statuses = {"delivered", "opened", "clicked", "failed"}
-        status = request.status if request.status in valid_statuses else "failed"
+        status = receipt.status if receipt.status in valid_statuses else "failed"
 
         await db.messages.update_one(
             {"_id": msg_id},

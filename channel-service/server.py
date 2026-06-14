@@ -1,6 +1,8 @@
 import asyncio
 import os
 import random
+import hashlib
+import hmac
 from datetime import datetime, timezone
 from fastapi import FastAPI, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,13 +13,19 @@ from dotenv import load_dotenv
 load_dotenv()
 
 CRM_RECEIPT_URL = os.getenv("CRM_RECEIPT_URL", "http://localhost:8000/api/receipts")
+CALLBACK_SECRET = os.getenv("CALLBACK_SECRET", "")
+ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("ALLOWED_ORIGINS", "*").split(",")
+    if origin.strip()
+]
 
 app = FastAPI(title="PawLife Channel Service Stub")
 
 # Allow requests from CRM
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS or ["*"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -53,6 +61,14 @@ async def process_callback(payload: SendRequest):
         "status": status,
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
+    callback_headers = {}
+    if CALLBACK_SECRET:
+        signature_payload = f"{callback_data['message_id']}.{callback_data['status']}.{callback_data['timestamp']}"
+        callback_headers["x-callback-signature"] = hmac.new(
+            CALLBACK_SECRET.encode("utf-8"),
+            signature_payload.encode("utf-8"),
+            hashlib.sha256,
+        ).hexdigest()
     
     target_url = payload.callback_url or CRM_RECEIPT_URL
     
@@ -60,13 +76,23 @@ async def process_callback(payload: SendRequest):
     
     async with httpx.AsyncClient() as client:
         try:
-            res = await client.post(target_url, json=callback_data, timeout=10.0)
+            res = await client.post(
+                target_url,
+                json=callback_data,
+                headers=callback_headers,
+                timeout=10.0,
+            )
             res.raise_for_status()
         except Exception as e:
             print(f"[{datetime.now().isoformat()}] Callback failed for msg {payload.message_id}. Retrying in 3 seconds...")
             await asyncio.sleep(3.0)
             try:
-                res = await client.post(target_url, json=callback_data, timeout=10.0)
+                res = await client.post(
+                    target_url,
+                    json=callback_data,
+                    headers=callback_headers,
+                    timeout=10.0,
+                )
                 res.raise_for_status()
                 print(f"[{datetime.now().isoformat()}] Retry successful for msg {payload.message_id}")
             except Exception as e2:
