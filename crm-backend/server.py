@@ -381,7 +381,7 @@ async def create_campaign(request: CreateCampaignRequest):
         new_campaign["_id"] = str(result.inserted_id)
         return new_campaign
     except Exception as e:
-        logger.error(f"create_campaign error: {e}")
+        logger.exception("create_campaign error")
         raise HTTPException(status_code=500, detail="Failed to create campaign")
 
 
@@ -517,7 +517,7 @@ async def send_campaign(campaign_id: str):
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"send_campaign error: {e}")
+        logger.exception("send_campaign error")
         raise HTTPException(status_code=500, detail="Failed to send campaign")
 
 
