@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Search, Filter, X, Package, Calendar } from 'lucide-react';
+import { Search, Filter, X, Package, Calendar, Users, MapPin, Rocket, Sparkles } from 'lucide-react';
 import { formatDistanceToNow, format } from 'date-fns';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
@@ -80,48 +80,52 @@ const Customers = () => {
 
   const restockClass = (status) => {
     if (status === 'overdue') return 'bg-red-50 border-red-100 text-red-800';
-    if (status === 'due') return 'bg-orange-50 border-orange-100 text-orange-800';
+    if (status === 'due') return 'bg-amber-50 border-amber-200 text-amber-900';
     return 'bg-blue-50 border-blue-100 text-blue-800';
   };
 
   return (
-    <div className="h-full flex flex-col max-w-7xl mx-auto relative">
-      <div className="mb-6 flex justify-between items-center flex-wrap gap-4">
+    <div className="h-full flex flex-col max-w-7xl mx-auto relative animate-fade-in">
+      <div className="mb-10 flex justify-between items-center flex-wrap gap-6">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Customers</h1>
-          <p className="text-slate-500 text-sm mt-1">
-            Showing {filteredCustomers.length} of {customers.length} customers
+          <h1 className="text-4xl font-semibold text-slate-900 tracking-tight">Customers</h1>
+          <p className="text-slate-500 font-medium mt-2">
+            Showing <span className="text-accent-600">{filteredCustomers.length}</span> of {customers.length} pet owners
           </p>
         </div>
 
-        <div className="flex space-x-3">
-          <div className="relative">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
+        <div className="flex items-center gap-4">
+          <div className="relative group">
+            <Search className="w-4 h-4 absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 group-focus-within:text-accent-500 transition-colors" />
             <input
               type="text"
-              placeholder="Search customers..."
+              placeholder="Search by name or city..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 w-64"
+              className="pl-11 pr-5 py-3 bg-white/50 backdrop-blur-sm border border-slate-100 rounded-2xl text-sm focus:outline-none focus:ring-4 focus:ring-accent-500/10 focus:bg-white w-72 shadow-sm transition-all"
             />
           </div>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`btn-secondary flex items-center text-sm ${showFilters ? 'ring-2 ring-primary/30' : ''}`}
+            className={`flex items-center px-5 py-3 rounded-2xl text-sm font-bold transition-all ${
+              showFilters 
+                ? 'bg-accent-600 text-white shadow-lg shadow-accent-500/20' 
+                : 'bg-white text-slate-600 border border-slate-100 hover:bg-slate-50 shadow-sm'
+            }`}
           >
-            <Filter className="w-4 h-4 mr-2" /> Filters
+            <Filter className={`w-4 h-4 mr-2 ${showFilters ? 'text-white' : 'text-slate-400'}`} /> Filters
           </button>
         </div>
       </div>
 
       {showFilters && (
-        <div className="card p-4 mb-4 grid grid-cols-1 md:grid-cols-5 gap-4 items-end animate-fade-in">
-          <div>
-            <label className="text-xs font-medium text-slate-500 mb-1 block">City</label>
+        <div className="card p-8 mb-10 grid grid-cols-1 md:grid-cols-5 gap-6 items-end animate-fade-in shadow-sm ring-1 ring-accent-50">
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block pl-1">City</label>
             <select
               value={filters.city}
               onChange={(e) => setFilters({ ...filters, city: e.target.value })}
-              className="w-full p-2 border border-slate-200 rounded-lg text-sm"
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-medium focus:ring-2 focus:ring-accent-500/10 focus:bg-white transition-all"
             >
               <option value="">All cities</option>
               {CITIES.filter(Boolean).map(c => (
@@ -129,74 +133,86 @@ const Customers = () => {
               ))}
             </select>
           </div>
-          <div>
-            <label className="text-xs font-medium text-slate-500 mb-1 block">Pet type</label>
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block pl-1">Pet type</label>
             <select
               value={filters.pet_type}
               onChange={(e) => setFilters({ ...filters, pet_type: e.target.value })}
-              className="w-full p-2 border border-slate-200 rounded-lg text-sm"
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-medium focus:ring-2 focus:ring-accent-500/10 focus:bg-white transition-all"
             >
               <option value="">All pets</option>
               <option value="dog">Dog</option>
               <option value="cat">Cat</option>
             </select>
           </div>
-          <div>
-            <label className="text-xs font-medium text-slate-500 mb-1 block">Breed</label>
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block pl-1">Breed</label>
             <input
               type="text"
               placeholder="e.g. Labrador"
               value={filters.breed}
               onChange={(e) => setFilters({ ...filters, breed: e.target.value })}
-              className="w-full p-2 border border-slate-200 rounded-lg text-sm"
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-sm font-medium focus:ring-2 focus:ring-accent-500/10 focus:bg-white transition-all"
             />
           </div>
-          <div>
-            <label className="text-xs font-medium text-slate-500 mb-1 block">
-              Last order ≥ {filters.last_order_days_ago || 0} days ago
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block pl-1">
+              Dormant {filters.last_order_days_ago || 0}d+
             </label>
-            <input
-              type="range"
-              min="0"
-              max="90"
-              value={filters.last_order_days_ago || 0}
-              onChange={(e) => setFilters({ ...filters, last_order_days_ago: e.target.value === '0' ? '' : e.target.value })}
-              className="w-full"
-            />
+            <div className="px-1">
+              <input
+                type="range"
+                min="0"
+                max="90"
+                value={filters.last_order_days_ago || 0}
+                onChange={(e) => setFilters({ ...filters, last_order_days_ago: e.target.value === '0' ? '' : e.target.value })}
+                className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-accent-600"
+              />
+            </div>
           </div>
-          <button onClick={clearFilters} className="btn-secondary text-sm">Clear filters</button>
+          <button onClick={clearFilters} className="btn-secondary text-xs uppercase tracking-widest font-bold py-3">Clear</button>
         </div>
       )}
 
       {error && (
-        <div className="mb-4 p-4 bg-red-50 border border-red-100 rounded-xl text-red-700 text-sm flex justify-between items-center">
-          <span>{error}</span>
-          <button onClick={fetchCustomers} className="text-red-800 font-medium underline">Retry</button>
+        <div className="mb-10 p-6 bg-red-50 border border-red-100 rounded-[2rem] text-red-700 text-sm flex justify-between items-center shadow-sm">
+          <span className="flex items-center"><X className="w-5 h-5 mr-3 bg-white p-1 rounded-full text-red-500" /> {error}</span>
+          <button onClick={fetchCustomers} className="font-bold hover:underline">Retry</button>
         </div>
       )}
 
-      <div className="card flex-1 overflow-hidden flex flex-col">
+      <div className="card flex-1 overflow-hidden flex flex-col border border-white/50 shadow-sm">
         <div className="overflow-x-auto flex-1">
-          <table className="w-full text-left text-sm whitespace-nowrap">
-            <thead className="bg-slate-50 text-slate-500 uppercase text-xs sticky top-0 z-10 border-b border-slate-200">
-              <tr>
-                <th className="px-6 py-4 font-medium">Owner</th>
-                <th className="px-6 py-4 font-medium">City</th>
-                <th className="px-6 py-4 font-medium">Pets</th>
-                <th className="px-6 py-4 font-medium">Orders</th>
-                <th className="px-6 py-4 font-medium">Spent</th>
-                <th className="px-6 py-4 font-medium">Last Order</th>
-                <th className="px-6 py-4 font-medium text-right">Action</th>
+          <table className="w-full text-left text-sm whitespace-nowrap border-collapse">
+            <thead>
+              <tr className="bg-slate-50/50 text-slate-400 uppercase text-[10px] font-bold tracking-[0.15em] border-b border-slate-50">
+                <th className="px-8 py-5 font-bold">Pet Owner</th>
+                <th className="px-8 py-5 font-bold">City</th>
+                <th className="px-8 py-5 font-bold">Pets</th>
+                <th className="px-8 py-5 font-bold text-center">Orders</th>
+                <th className="px-8 py-5 font-bold">Total Spent</th>
+                <th className="px-8 py-5 font-bold">Activity</th>
+                <th className="px-8 py-5 font-bold text-right pr-12">Details</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="7" className="px-6 py-10 text-center text-slate-400">Loading customers...</td>
+                  <td colSpan="7" className="px-8 py-20">
+                    <div className="flex flex-col items-center justify-center gap-4">
+                      <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-accent-500" />
+                      <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Accessing Database...</p>
+                    </div>
+                  </td>
                 </tr>
               ) : filteredCustomers.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="px-6 py-10 text-center text-slate-400">No customers match your filters.</td>
+                  <td colSpan="7" className="px-8 py-20 text-center">
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="text-4xl mb-4 opacity-20">🔍</div>
+                      <p className="text-slate-500 font-bold uppercase tracking-widest text-xs italic">No matching pet owners found</p>
+                    </div>
+                  </td>
                 </tr>
               ) : filteredCustomers.map((customer) => (
                 <PetOwnerRow key={customer._id} customer={customer} onView={viewCustomer} />
@@ -207,47 +223,63 @@ const Customers = () => {
       </div>
 
       {selectedCustomer && (
-        <div className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-50 flex justify-end" onClick={closeProfile}>
-          <div className="w-full max-w-md bg-white h-full shadow-2xl flex flex-col animate-slide-in" onClick={(e) => e.stopPropagation()}>
-            <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-              <h2 className="text-xl font-bold text-slate-800">Customer Profile</h2>
-              <button onClick={closeProfile} className="p-2 hover:bg-slate-200 rounded-full transition-colors">
-                <X className="w-5 h-5 text-slate-500" />
+        <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-md z-50 flex justify-end" onClick={closeProfile}>
+          <div className="w-full max-w-lg bg-white h-full shadow-2xl flex flex-col animate-slide-in relative" onClick={(e) => e.stopPropagation()}>
+            <div className="p-8 border-b border-slate-50 flex justify-between items-center">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-2xl bg-accent-600 flex items-center justify-center text-white text-lg font-bold shadow-lg shadow-accent-200">
+                  <Users className="w-5 h-5" />
+                </div>
+                <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">Profile</h2>
+              </div>
+              <button 
+                onClick={closeProfile} 
+                className="w-10 h-10 flex items-center justify-center hover:bg-slate-100 rounded-full text-slate-400 transition-all active:scale-90"
+              >
+                <X className="w-6 h-6" />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6">
+            <div className="flex-1 overflow-y-auto p-10">
               {profileLoading || !customerProfile ? (
-                <div className="flex justify-center py-10">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                <div className="flex flex-col items-center justify-center h-full gap-4">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-600"></div>
+                  <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Loading profile...</p>
                 </div>
               ) : (
-                <div className="space-y-8">
-                  <div className="flex items-center">
-                    <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-2xl mr-4">
+                <div className="space-y-12">
+                  <div className="bg-accent-50/50 p-8 rounded-[2rem] border border-accent-100 flex items-center">
+                    <div className="w-20 h-20 rounded-3xl bg-white text-accent-600 flex items-center justify-center font-black text-4xl shadow-sm mr-6 border border-white">
                       {customerProfile.name.charAt(0)}
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-slate-800">{customerProfile.name}</h3>
-                      <p className="text-slate-500 text-sm mt-1">{customerProfile.city} • {customerProfile.email}</p>
-                      <p className="text-slate-500 text-sm">{customerProfile.phone}</p>
+                      <h3 className="text-2xl font-black text-slate-900 tracking-tight">{customerProfile.name}</h3>
+                      <div className="flex items-center text-slate-500 font-bold text-xs uppercase tracking-widest mt-2">
+                        <MapPin className="w-3 h-3 mr-1.5 text-accent-400" /> {customerProfile.city}
+                      </div>
+                      <p className="text-slate-400 font-medium text-sm mt-1">{customerProfile.email}</p>
                     </div>
                   </div>
 
-                  <div>
-                    <h4 className="font-semibold text-slate-800 mb-3 flex items-center">
-                      <span className="bg-slate-100 p-1.5 rounded-lg mr-2">🐾</span>
-                      Pets ({customerProfile.pets?.length || 0})
+                  <div className="space-y-6">
+                    <h4 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] flex items-center">
+                      <span className="w-1.5 h-1.5 bg-accent-500 rounded-full mr-3"></span>
+                      Pets Owned
                     </h4>
-                    <div className="grid gap-3">
+                    <div className="grid gap-4">
                       {customerProfile.pets?.map(pet => (
-                        <div key={pet.pet_id} className="border border-slate-100 rounded-xl p-4 bg-slate-50 flex items-start">
-                          <div className="text-3xl mr-3">{pet.pet_type === 'dog' ? '🐕' : '🐈'}</div>
+                        <div key={pet.pet_id} className="card p-6 bg-white border-slate-100 hover:border-accent-100 transition-colors flex items-start group">
+                          <div className="text-4xl mr-5 group-hover:scale-110 transition-transform duration-300 shadow-inner bg-slate-50 p-3 rounded-2xl border border-white">
+                            {pet.pet_type === 'dog' ? '🐶' : '🐱'}
+                          </div>
                           <div>
-                            <p className="font-bold text-slate-800">{pet.pet_name}</p>
-                            <p className="text-xs text-slate-500 capitalize">{pet.breed} • {pet.age_years} yrs</p>
-                            <p className="text-xs text-slate-400 mt-1 flex items-center">
-                              <Calendar className="w-3 h-3 mr-1" /> B-day: {pet.birthday}
+                            <p className="font-extrabold text-slate-900 text-lg">{pet.pet_name}</p>
+                            <div className="flex gap-2 mt-1">
+                              <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-bold uppercase tracking-widest">{pet.breed}</span>
+                              <span className="text-[10px] bg-accent-50 text-accent-600 px-2 py-0.5 rounded-md font-bold uppercase tracking-widest">{pet.age_years} yrs</span>
+                            </div>
+                            <p className="text-xs text-slate-400 mt-3 font-semibold flex items-center">
+                              <Calendar className="w-3.5 h-3.5 mr-2 text-slate-300" /> Born: {pet.birthday}
                             </p>
                           </div>
                         </div>
@@ -255,37 +287,52 @@ const Customers = () => {
                     </div>
                   </div>
 
-                  <div>
-                    <h4 className="font-semibold text-slate-800 mb-3 flex items-center">
-                      <span className="bg-slate-100 p-1.5 rounded-lg mr-2">📦</span>
+                  <div className="space-y-6">
+                    <h4 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] flex items-center">
+                      <span className="w-1.5 h-1.5 bg-accent-500 rounded-full mr-3"></span>
                       Recent Orders
                     </h4>
                     {customerProfile.orders?.length > 0 ? (
-                      <div className="border border-slate-100 rounded-xl overflow-hidden">
+                      <div className="card overflow-hidden border-slate-50 bg-white">
                         {customerProfile.orders.slice(0, 5).map((order, idx) => (
-                          <div key={order._id} className={`p-4 ${idx !== 0 ? 'border-t border-slate-100' : ''} bg-white flex justify-between items-center`}>
+                          <div key={order._id} className={`p-5 ${idx !== 0 ? 'border-t border-slate-50' : ''} flex justify-between items-center hover:bg-slate-50 transition-colors`}>
                             <div className="flex items-start">
-                              <Package className="w-4 h-4 text-slate-400 mt-0.5 mr-2" />
+                              <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center mr-4 shrink-0 shadow-inner">
+                                <Package className="w-4 h-4 text-slate-400" />
+                              </div>
                               <div>
-                                <p className="text-sm font-medium text-slate-800 line-clamp-1">{order.product_name}</p>
-                                <p className="text-xs text-slate-500 capitalize">
-                                  {order.product_category} • {format(new Date(order.ordered_at), 'MMM d, yyyy')}
+                                <p className="text-sm font-bold text-slate-900 line-clamp-1">{order.product_name}</p>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                                  {order.product_category} • {format(new Date(order.ordered_at), 'MMM d')}
                                 </p>
                               </div>
                             </div>
-                            <span className="font-semibold text-slate-800 ml-4">₹{order.amount}</span>
+                            <div className="text-right">
+                              <span className="font-black text-slate-900 text-sm">₹{order.amount}</span>
+                            </div>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <p className="text-sm text-slate-500">No orders found.</p>
+                      <div className="text-center py-10 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
+                        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">No transaction history</p>
+                      </div>
                     )}
                   </div>
 
                   {customerProfile.restock_prediction && (
-                    <div className={`border rounded-xl p-4 ${restockClass(customerProfile.restock_prediction.status)}`}>
-                      <h4 className="font-semibold text-sm mb-1">Restock Prediction</h4>
-                      <p className="text-xs">{customerProfile.restock_prediction.message}</p>
+                    <div className={`p-8 rounded-[2rem] border-2 shadow-xl shadow-black/5 animate-pulse relative overflow-hidden ${
+                      customerProfile.restock_prediction.status === 'overdue' 
+                        ? 'bg-red-50/50 border-red-100 text-red-900' 
+                        : customerProfile.restock_prediction.status === 'due'
+                        ? 'bg-amber-50/50 border-amber-100 text-amber-900'
+                        : 'bg-emerald-50/50 border-emerald-100 text-emerald-900'
+                    }`}>
+                      <div className="absolute top-0 right-0 p-4 opacity-10">
+                        <Rocket className="w-16 h-16" />
+                      </div>
+                      <h4 className="font-extrabold text-[10px] uppercase tracking-[0.2em] mb-2">Restock Intelligence</h4>
+                      <p className="text-sm font-bold leading-relaxed">{customerProfile.restock_prediction.message}</p>
                     </div>
                   )}
                 </div>

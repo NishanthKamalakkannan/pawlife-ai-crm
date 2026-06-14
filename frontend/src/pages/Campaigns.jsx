@@ -28,28 +28,28 @@ const Campaigns = () => {
   const filteredCampaigns = campaigns.filter(c => filter === 'all' || c.status === filter);
 
   return (
-    <div className="h-full flex flex-col max-w-7xl mx-auto">
-      <div className="mb-8 flex justify-between items-center">
+    <div className="h-full flex flex-col max-w-7xl mx-auto animate-fade-in">
+      <div className="mb-10 flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Campaigns</h1>
-          <p className="text-slate-500 text-sm mt-1">Manage and track your marketing campaigns</p>
+          <h1 className="text-4xl font-semibold text-slate-900 tracking-tight">Campaigns</h1>
+          <p className="text-slate-500 font-medium mt-2">Manage and track your marketing campaigns</p>
         </div>
         
-        <Link to="/campaigns/new" className="btn-primary flex items-center">
-          <PlusCircle className="w-5 h-5 mr-2" />
+        <Link to="/campaigns/new" className="btn-primary flex items-center shadow-lg shadow-accent-500/15 group">
+          <PlusCircle className="w-5 h-5 mr-2 transition-transform group-hover:rotate-90" />
           Create Campaign
         </Link>
       </div>
 
-      <div className="flex space-x-2 mb-6 border-b border-slate-200 pb-px">
+      <div className="flex bg-white/50 backdrop-blur-sm p-1.5 rounded-2xl border border-slate-100 shadow-sm mb-10 w-fit">
         {['all', 'sending', 'completed', 'draft'].map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-4 py-2 text-sm font-medium capitalize border-b-2 transition-colors ${
+            className={`px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all ${
               filter === f 
-                ? 'border-primary text-primary' 
-                : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+                ? 'bg-white text-accent-600 shadow-sm border border-slate-50' 
+                : 'text-slate-400 hover:text-slate-600'
             }`}
           >
             {f}
@@ -58,24 +58,25 @@ const Campaigns = () => {
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center py-20">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+        <div className="flex flex-col items-center justify-center py-32 gap-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-600"></div>
+          <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Accessing Archives...</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredCampaigns.length > 0 ? (
             filteredCampaigns.map(camp => (
               <CampaignCard key={camp._id} campaign={camp} />
             ))
           ) : (
-            <div className="col-span-full card p-16 text-center">
-              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <PlusCircle className="w-8 h-8 text-slate-400" />
+            <div className="col-span-full bg-white/50 backdrop-blur-sm p-24 rounded-[3rem] border-2 border-dashed border-slate-100 text-center flex flex-col items-center">
+              <div className="w-20 h-20 bg-slate-50 rounded-[2rem] flex items-center justify-center mb-6 shadow-inner">
+                <PlusCircle className="w-10 h-10 text-slate-300" />
               </div>
-              <h3 className="text-lg font-medium text-slate-800 mb-2">No campaigns found</h3>
-              <p className="text-slate-500 mb-6">You haven't created any campaigns with this status yet.</p>
-              <Link to="/campaigns/new" className="btn-primary inline-flex">
-                Create your first campaign
+              <h3 className="text-xl font-black text-slate-800 mb-2">No campaigns found</h3>
+              <p className="text-slate-500 font-medium mb-8 max-w-xs mx-auto text-sm">You haven't created any campaigns with this status yet.</p>
+              <Link to="/campaigns/new" className="px-8 py-3 bg-accent-600 text-white rounded-2xl font-bold shadow-xl shadow-accent-200 hover:bg-accent-700 transition-all active:scale-95">
+                Draft first campaign
               </Link>
             </div>
           )}

@@ -15,16 +15,16 @@ const CampaignCard = ({ campaign }) => {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'completed':
-        return <span className="px-2.5 py-1 text-xs font-medium bg-success/10 text-success border border-success/20 rounded-full">Completed</span>;
+        return <span className="px-3 py-1 text-[10px] font-bold uppercase tracking-widest bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-full">Completed</span>;
       case 'sending':
         return (
-          <span className="px-2.5 py-1 text-xs font-medium bg-blue-50 text-blue-600 border border-blue-200 rounded-full flex items-center">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1.5 animate-ping"></span>
+          <span className="px-3 py-1 text-[10px] font-bold uppercase tracking-widest bg-accent-50 text-accent-600 border border-accent-100 rounded-full flex items-center">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-500 mr-2 animate-pulse"></span>
             Sending
           </span>
         );
       default:
-        return <span className="px-2.5 py-1 text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200 rounded-full">Draft</span>;
+        return <span className="px-3 py-1 text-[10px] font-bold uppercase tracking-widest bg-slate-50 text-slate-500 border border-slate-100 rounded-full">Draft</span>;
     }
   };
 
@@ -37,43 +37,43 @@ const CampaignCard = ({ campaign }) => {
   const clickRate = sent > 0 ? Math.round((clicked / sent) * 100) : 0;
 
   return (
-    <div className="card p-5 hover:shadow-md transition-all group">
-      <div className="flex justify-between items-start mb-4">
+    <div className="card p-6 hover:translate-y-[-2px] transition-all group">
+      <div className="flex justify-between items-start mb-6">
         <div>
-          <h3 className="font-semibold text-slate-800 text-lg mb-1">{campaign.name}</h3>
-          <div className="flex items-center text-xs text-slate-500 space-x-3">
-            <span className="flex items-center capitalize">
+          <h3 className="font-bold text-slate-800 text-lg mb-1.5 group-hover:text-accent-600 transition-colors">{campaign.name}</h3>
+          <div className="flex items-center text-xs text-slate-400 space-x-3 font-medium">
+            <span className="flex items-center capitalize bg-slate-50 px-2 py-0.5 rounded-md">
               {getChannelIcon(campaign.channel)}
-              <span className="ml-1">{campaign.channel}</span>
+              <span className="ml-1.5">{campaign.channel}</span>
             </span>
-            <span>•</span>
+            <span className="text-slate-200">•</span>
             <span>{campaign.created_at ? formatDistanceToNow(new Date(campaign.created_at), { addSuffix: true }) : 'Just now'}</span>
           </div>
         </div>
         {getStatusBadge(campaign.status)}
       </div>
       
-      <div className="grid grid-cols-3 gap-4 mb-5 p-3 bg-slate-50 rounded-lg">
+      <div className="grid grid-cols-3 gap-6 mb-6 p-4 bg-accent-50/30 rounded-2xl border border-accent-50/50">
         <div>
-          <p className="text-xs text-slate-500 mb-1">Sent</p>
-          <p className="font-semibold text-slate-800">{sent}</p>
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Sent</p>
+          <p className="text-lg font-bold text-slate-800">{sent}</p>
         </div>
         <div>
-          <p className="text-xs text-slate-500 mb-1">Opened</p>
-          <p className="font-semibold text-slate-800">{openRate}%</p>
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Opened</p>
+          <p className="text-lg font-bold text-accent-600">{openRate}%</p>
         </div>
         <div>
-          <p className="text-xs text-slate-500 mb-1">Clicked</p>
-          <p className="font-semibold text-slate-800">{clickRate}%</p>
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Clicked</p>
+          <p className="text-lg font-bold text-emerald-600">{clickRate}%</p>
         </div>
       </div>
       
       <div className="flex justify-end">
         <Link 
           to={`/campaigns/${campaign._id}`}
-          className="text-sm font-medium text-primary hover:text-orange-700 flex items-center transition-colors group-hover:translate-x-1 duration-200"
+          className="text-sm font-bold text-accent-500 hover:text-accent-600 flex items-center transition-all group-hover:gap-2 gap-1"
         >
-          View Details <ArrowRight className="w-4 h-4 ml-1" />
+          View Details <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
     </div>

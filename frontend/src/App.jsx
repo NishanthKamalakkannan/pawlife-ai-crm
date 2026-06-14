@@ -11,8 +11,8 @@ function App() {
     <BrowserRouter>
       <div className="flex h-screen bg-background overflow-hidden">
         <Sidebar />
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <main className="flex-1 overflow-x-hidden overflow-y-auto bg-background p-6">
+        <div className="flex-1 flex flex-col overflow-hidden bg-background">
+          <main className="flex-1 overflow-x-hidden overflow-y-auto p-8">
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />

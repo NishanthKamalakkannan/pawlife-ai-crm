@@ -37,45 +37,45 @@ const AutopilotCard = ({ suggestion }) => {
   };
 
   return (
-    <div className="card p-4 flex flex-col justify-between border-l-4" style={{ borderLeftColor: suggestion.urgency === 'high' ? '#EF4444' : '#EAB308' }}>
+    <div className={`card p-6 flex flex-col justify-between group h-full ${suggestion.urgency === 'high' ? 'ring-1 ring-red-100' : 'ring-1 ring-yellow-50'}`}>
       <div>
-        <div className="flex justify-between items-start mb-2">
-          <div className="flex items-center space-x-2 flex-wrap gap-1">
+        <div className="flex justify-between items-start mb-4">
+          <div className="flex items-center space-x-2 flex-wrap gap-2">
             {suggestion.urgency === 'high' ? (
-              <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-red-100 text-red-600 rounded flex items-center">
+              <span className="px-3 py-1 text-[10px] font-bold uppercase tracking-widest bg-red-50 text-red-500 rounded-full flex items-center border border-red-100">
                 <AlertCircle className="w-3 h-3 mr-1" /> High Urgency
               </span>
             ) : (
-              <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-yellow-100 text-yellow-700 rounded flex items-center">
+              <span className="px-3 py-1 text-[10px] font-bold uppercase tracking-widest bg-amber-50 text-amber-600 rounded-full flex items-center border border-amber-100">
                 <Clock className="w-3 h-3 mr-1" /> Medium
               </span>
             )}
-            <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
-              {suggestion.audience_count} users
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
+              {suggestion.audience_count} AUDIENCE
             </span>
           </div>
         </div>
 
-        <h4 className="font-semibold text-slate-800 text-base mb-1">{suggestion.title}</h4>
-        <p className="text-sm text-slate-500 mb-2">{suggestion.description}</p>
+        <h4 className="font-bold text-slate-800 text-lg mb-2 leading-tight">{suggestion.title}</h4>
+        <p className="text-sm text-slate-500 mb-4 line-clamp-2 leading-relaxed">{suggestion.description}</p>
 
         <button
           onClick={handleWhy}
-          className="text-xs text-primary hover:text-orange-700 flex items-center gap-1 mb-3 font-medium transition-colors"
+          className="text-xs text-accent-500 hover:text-accent-600 flex items-center gap-1.5 mb-5 font-semibold transition-colors group/btn"
         >
-          <HelpCircle className="w-3.5 h-3.5" />
+          <HelpCircle className="w-4 h-4 transition-transform group-hover/btn:rotate-12" />
           Why this segment?
         </button>
 
         {showWhy && (
-          <div className="text-xs text-slate-600 bg-slate-50 border border-slate-100 rounded-lg p-2.5 mb-3 italic leading-relaxed">
+          <div className="text-xs text-slate-600 bg-slate-50 rounded-xl p-4 mb-5 leading-relaxed border border-slate-100 animate-fade-in">
             {loadingExplain ? (
-              <span className="flex items-center gap-2 not-italic text-slate-400">
-                <span className="animate-spin rounded-full h-3 w-3 border-b-2 border-primary" />
+              <span className="flex items-center gap-2 text-slate-400">
+                <span className="animate-spin rounded-full h-3 w-3 border-b-2 border-accent-500" />
                 AI is analyzing...
               </span>
             ) : (
-              `"${explanation}"`
+              <span className="italic">"{explanation}"</span>
             )}
           </div>
         )}
@@ -83,7 +83,7 @@ const AutopilotCard = ({ suggestion }) => {
 
       <button
         onClick={handleLaunch}
-        className="w-full btn-primary text-sm flex items-center justify-center py-2"
+        className="w-full btn-primary text-sm flex items-center justify-center group-hover:shadow-lg group-hover:shadow-accent-500/15 transition-all"
       >
         <Rocket className="w-4 h-4 mr-2" />
         Launch Campaign
