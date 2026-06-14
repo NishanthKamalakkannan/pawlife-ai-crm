@@ -4,3 +4,18 @@ services:
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn server:app --host 0.0.0.0 --port 8000
+    envVars:
+      - key: MONGO_URL
+        sync: false
+      - key: DB_NAME
+        value: pawlife
+      - key: GROQ_API_KEY
+        sync: false
+      - key: CHANNEL_SERVICE_URL
+        sync: false
+      - key: RENDER_EXTERNAL_URL
+        sync: false
+      - key: CALLBACK_SECRET
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false

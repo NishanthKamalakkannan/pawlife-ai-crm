@@ -4,3 +4,10 @@ services:
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn server:app --host 0.0.0.0 --port 8001
+    envVars:
+      - key: CRM_RECEIPT_URL
+        sync: false
+      - key: CALLBACK_SECRET
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false

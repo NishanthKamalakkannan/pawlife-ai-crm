@@ -66,12 +66,61 @@ Open http://localhost:5173
 4. **Campaign detail** → watch live stats update → read AI insight
 5. **Customers** → filter, search, view profile + restock prediction
 
+## Deployment (Render + Vercel)
+
+### 1. Provision managed services
+
+- Create a MongoDB Atlas cluster and collect connection string for `MONGO_URL`.
+- Create a Groq API key for `GROQ_API_KEY`.
+- Generate one shared random value for `CALLBACK_SECRET` and set it in both backend services.
+
+### 2. Deploy CRM backend on Render
+
+- Use `/home/runner/work/pawlife-ai-crm/pawlife-ai-crm/NishanthKamalakkannan/pawlife-ai-crm/crm-backend/render.yaml`.
+- Configure:
+  - `MONGO_URL`
+  - `DB_NAME` (default: `pawlife`)
+  - `GROQ_API_KEY`
+  - `CHANNEL_SERVICE_URL`
+  - `RENDER_EXTERNAL_URL` (public CRM URL)
+  - `CALLBACK_SECRET`
+  - `ALLOWED_ORIGINS` (comma-separated frontend origins)
+
+### 3. Deploy channel service on Render
+
+- Use `/home/runner/work/pawlife-ai-crm/pawlife-ai-crm/NishanthKamalakkannan/pawlife-ai-crm/channel-service/render.yaml`.
+- Configure:
+  - `CRM_RECEIPT_URL` (e.g. `https://<crm-host>/api/receipts`)
+  - `CALLBACK_SECRET` (same shared secret as CRM)
+  - `ALLOWED_ORIGINS`
+
+### 4. Deploy frontend on Vercel
+
+- Deploy `/home/runner/work/pawlife-ai-crm/pawlife-ai-crm/NishanthKamalakkannan/pawlife-ai-crm/frontend`.
+- `frontend/vercel.json` handles SPA rewrites.
+- Set `VITE_API_URL=https://<crm-host>/api`.
+
+### 5. Seed demo data once
+
+Run `python seed.py` in deployed CRM runtime (or one-off job) after env setup.
+
+### 6. Post-deploy validation
+
+- CRM health: `GET /api/health`
+- Channel health: `GET /health`
+- Validate campaign launch flow:
+  - Dashboard loads
+  - Segment + campaign creation works
+  - Send triggers channel callback
+  - CRM receipts update campaign message stats
+  - AI endpoints return responses
+
 ## Tradeoffs (conscious choices)
 
 | At scale | For this scope |
 |----------|----------------|
 | Job queue (Celery/SQS) for sends | `asyncio.gather()` — sufficient for ~150 recipients |
-| Webhook signature verification | Trust stub channel in demo |
+| Full webhook platform & replay-protection | HMAC callback signature via shared `CALLBACK_SECRET` |
 | Redis caching for autopilot | Full scan on each request — simple, correct |
 | Microservices + routers | Modular helpers (`filters.py`, `autopilot.py`) in one deployable app |
 | Real WhatsApp/SMS/Email | Separate stub service with probabilistic callbacks |
