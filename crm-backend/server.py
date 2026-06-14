@@ -183,6 +183,16 @@ async def check_campaign_completion(campaign_id: str):
 
 # --- Health ---
 
+@app.get("/")
+async def root():
+    return {
+        "service": "PawLife CRM API",
+        "status": "ok",
+        "health": "/api/health",
+        "docs": "/docs",
+    }
+
+
 @app.get("/api/health")
 async def health_check():
     return {"status": "ok", "service": "PawLife CRM API"}
