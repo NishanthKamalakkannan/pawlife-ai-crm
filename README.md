@@ -76,7 +76,7 @@ Open http://localhost:5173
 
 ### 2. Deploy CRM backend on Render
 
-- Use `/home/runner/work/pawlife-ai-crm/pawlife-ai-crm/NishanthKamalakkannan/pawlife-ai-crm/crm-backend/render.yaml`.
+- Use `crm-backend/render.yaml`.
 - Configure:
   - `MONGO_URL`
   - `DB_NAME` (default: `pawlife`)
@@ -88,7 +88,7 @@ Open http://localhost:5173
 
 ### 3. Deploy channel service on Render
 
-- Use `/home/runner/work/pawlife-ai-crm/pawlife-ai-crm/NishanthKamalakkannan/pawlife-ai-crm/channel-service/render.yaml`.
+- Use `channel-service/render.yaml`.
 - Configure:
   - `CRM_RECEIPT_URL` (e.g. `https://<crm-host>/api/receipts`)
   - `CALLBACK_SECRET` (same shared secret as CRM)
@@ -96,7 +96,7 @@ Open http://localhost:5173
 
 ### 4. Deploy frontend on Vercel
 
-- Deploy `/home/runner/work/pawlife-ai-crm/pawlife-ai-crm/NishanthKamalakkannan/pawlife-ai-crm/frontend`.
+- Deploy `frontend/`.
 - `frontend/vercel.json` handles SPA rewrites.
 - Set `VITE_API_URL=https://<crm-host>/api`.
 
