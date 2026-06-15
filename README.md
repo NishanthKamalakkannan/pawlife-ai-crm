@@ -1,35 +1,39 @@
-# PawLife — AI-Native Mini CRM
+# PawLife - AI-Native Mini CRM
 
-A marketing CRM for **PawLife**, an Indian D2C pet care brand. Helps marketers decide **who to reach**, **what to say**, and **which channel** to use — with AI woven into every step.
+**[🔗 Live Demo (Hosted URL)](#)** | **[🎥 Walkthrough Video](#)**
+
+A marketing CRM for **PawLife**, an Indian D2C pet care brand. Helps marketers decide **who to reach**, **what to say**, and **which channel** to use - with AI woven into every step.
 
 ## Product POV
 
-**AI campaign copilot** — autopilot surfaces opportunities from customer data, AI finds audiences and writes copy, marketer reviews and launches, system tracks live delivery via a callback-driven channel loop.
+**AI campaign copilot** - autopilot surfaces opportunities from customer data, AI finds audiences and writes copy, marketer reviews and launches, system tracks live delivery via a callback-driven channel loop.
 
 ## Architecture
 
-```
-React (Vite)  →  FastAPI CRM (:8000)  →  MongoDB Atlas
-                      ↓ asyncio.gather
-               Channel Stub (:8001)  →  POST /api/receipts (callbacks)
-                      ↓
-                    Groq AI (segmentation, copy, insights)
+```text
+React (Vite) -> FastAPI CRM (:8000) -> MongoDB Atlas
+                    | asyncio.gather
+                    v
+             Channel Stub (:8001) -> POST /api/receipts (callbacks)
+                    |
+                    v
+                 Groq AI (segmentation, copy, insights)
 ```
 
 ## Features
 
-- **Customer data** — 150 pet owners, ~400 orders (seed script)
-- **Segmentation** — manual filters + Groq natural-language audience finding
-- **Campaigns** — personalised messages with `{owner_name}` / `{pet_name}` placeholders
-- **Autopilot** — 5 proactive suggestions (reorder, birthday, life-stage, win-back, VIP)
-- **Live tracking** — campaign detail polls stats as channel callbacks arrive
-- **AI insights** — post-campaign performance analysis via Groq
+- **Customer data** - 150 pet owners, ~400 orders (seed script)
+- **Segmentation** - manual filters + Groq natural-language audience finding
+- **Campaigns** - personalised messages with `{owner_name}` / `{pet_name}` placeholders
+- **Autopilot** - 5 proactive suggestions (reorder, birthday, life-stage, win-back, VIP)
+- **Live tracking** - campaign detail polls stats as channel callbacks arrive
+- **AI insights** - post-campaign performance analysis via Groq
 
 ## Local setup
 
 ### 1. MongoDB + env
 
-Copy `.env.example` → `.env` in each service and fill in values.
+Copy `.env.example` -> `.env` in each service and fill in values.
 
 ### 2. CRM backend
 
@@ -60,36 +64,37 @@ Open http://localhost:5173
 
 ## Demo flow
 
-1. **Dashboard** → view stats + AI autopilot suggestions
+1. **Dashboard** -> view stats + AI autopilot suggestions
 2. Click **Launch Campaign** on "Food restock overdue"
-3. Audience auto-loaded → generate AI message → select WhatsApp → launch
-4. **Campaign detail** → watch live stats update → read AI insight
-5. **Customers** → filter, search, view profile + restock prediction
+3. Audience auto-loaded -> generate AI message -> select WhatsApp -> launch
+4. **Campaign detail** -> watch live stats update -> read AI insight
+5. **Customers** -> filter, search, view profile + restock prediction
 
 ## Tradeoffs (conscious choices)
 
 | At scale | For this scope |
 |----------|----------------|
-| Job queue (Celery/SQS) for sends | `asyncio.gather()` — sufficient for ~150 recipients |
+| Job queue (Celery/SQS) for sends | `asyncio.gather()` - sufficient for ~150 recipients |
 | Webhook signature verification | Trust stub channel in demo |
-| Redis caching for autopilot | Full scan on each request — simple, correct |
+| Redis caching for autopilot | Full scan on each request - simple, correct |
 | Microservices + routers | Modular helpers (`filters.py`, `autopilot.py`) in one deployable app |
 | Real WhatsApp/SMS/Email | Separate stub service with probabilistic callbacks |
 
 ## Project structure
 
-```
+```text
 pawlife/
-├── frontend/          React + Vite + Tailwind
-├── crm-backend/       FastAPI + Motor + Groq
-│   ├── server.py
-│   ├── filters.py     Shared segmentation logic
-│   ├── autopilot.py   Proactive campaign suggestions
-│   └── seed.py
-└── channel-service/   Message delivery stub
+|-- frontend/          React + Vite + Tailwind
+|-- crm-backend/       FastAPI + Motor + Groq
+|   |-- server.py
+|   |-- filters.py     Shared segmentation logic
+|   |-- autopilot.py   Proactive campaign suggestions
+|   `-- seed.py
+`-- channel-service/   Message delivery stub
 ```
 
 ## API health
 
 - CRM: `GET /api/health`
 - Channel: `GET /health`
+

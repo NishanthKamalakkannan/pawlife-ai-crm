@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Users, Megaphone, MessageSquare, Eye, MapPin, PawPrint, Bot, Sparkles } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { Users, Megaphone, MessageSquare, Eye, MapPin, PawPrint, Bot, Sparkles, AlertCircle } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
 import StatCard from '../components/StatCard';
@@ -180,7 +180,7 @@ const Dashboard = () => {
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div className="flex h-full items-center justify-center text-slate-400 font-medium italic">No campaign data yet — launch one from AI suggestions!</div>
+              <div className="flex h-full items-center justify-center text-slate-400 font-medium italic">No campaign data yet - launch one from AI suggestions!</div>
             )}
           </div>
         </div>
@@ -189,7 +189,7 @@ const Dashboard = () => {
           <div className="absolute top-0 right-0 w-32 h-32 bg-accent-600/10 blur-[60px] rounded-full -mr-16 -mt-16"></div>
           <div className="flex items-center mb-8 relative z-10">
             <div className="w-10 h-10 rounded-lg bg-brand-800 flex items-center justify-center text-accent-400 text-lg border border-brand-700 mr-4">
-              ✨
+              AI
             </div>
             <h2 className="text-xl font-bold tracking-tight">AI Autopilot</h2>
           </div>
@@ -225,7 +225,7 @@ const Dashboard = () => {
             ))
           ) : (
             <div className="col-span-full bg-white/50 backdrop-blur-sm p-20 rounded-[2.5rem] border-2 border-dashed border-slate-100 text-center flex flex-col items-center">
-              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-2xl mb-4">📭</div>
+              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-2xl mb-4">Empty</div>
               <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">No active campaigns</p>
             </div>
           )}

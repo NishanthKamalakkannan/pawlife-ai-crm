@@ -46,7 +46,7 @@ const CampaignCard = ({ campaign }) => {
               {getChannelIcon(campaign.channel)}
               <span className="ml-1.5">{campaign.channel}</span>
             </span>
-            <span className="text-slate-200">•</span>
+            <span className="text-slate-200">-</span>
             <span>{campaign.created_at ? formatDistanceToNow(new Date(campaign.created_at), { addSuffix: true }) : 'Just now'}</span>
           </div>
         </div>

@@ -23,7 +23,7 @@ const PetOwnerRow = ({ customer, onView }) => {
               className="w-9 h-9 rounded-xl bg-white border-2 border-accent-50 flex items-center justify-center text-lg shadow-sm"
               title={`${pet.pet_name} (${pet.breed})`}
             >
-              {pet.pet_type === 'dog' ? '🐶' : '🐱'}
+              {pet.pet_type === 'dog' ? 'Dog' : 'Cat'}
             </div>
           ))}
         </div>
@@ -32,11 +32,11 @@ const PetOwnerRow = ({ customer, onView }) => {
         <span className="text-sm font-bold text-slate-700">{customer.total_orders}</span>
       </td>
       <td className="px-6 py-5">
-        <span className="text-sm font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">₹{customer.total_spent?.toLocaleString()}</span>
+        <span className="text-sm font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">Rs. {customer.total_spent?.toLocaleString()}</span>
       </td>
       <td className="px-6 py-5">
         <span className="text-xs font-semibold text-slate-500">
-          {customer.last_order_days_ago != null ? `${customer.last_order_days_ago}d ago` : '—'}
+          {customer.last_order_days_ago != null ? `${customer.last_order_days_ago}d ago` : '-'}
         </span>
       </td>
       <td className="px-6 py-5 text-right">

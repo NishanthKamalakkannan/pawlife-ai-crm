@@ -1,13 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Search, Filter, X, Package, Calendar, Users, MapPin, Rocket, Sparkles } from 'lucide-react';
-import { formatDistanceToNow, format } from 'date-fns';
+import { Search, Filter, X, Package, Calendar, Users, MapPin, Rocket } from 'lucide-react';
+import { format } from 'date-fns';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
 import PetOwnerRow from '../components/PetOwnerRow';
 
 const CITIES = ['', 'Mumbai', 'Bangalore', 'Delhi', 'Chennai', 'Hyderabad', 'Pune'];
-const PET_TYPES = ['', 'dog', 'cat'];
-
 const Customers = () => {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -77,12 +75,6 @@ const Customers = () => {
     c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.city.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const restockClass = (status) => {
-    if (status === 'overdue') return 'bg-red-50 border-red-100 text-red-800';
-    if (status === 'due') return 'bg-amber-50 border-amber-200 text-amber-900';
-    return 'bg-blue-50 border-blue-100 text-blue-800';
-  };
 
   return (
     <div className="h-full flex flex-col max-w-7xl mx-auto relative animate-fade-in">
@@ -209,7 +201,7 @@ const Customers = () => {
                 <tr>
                   <td colSpan="7" className="px-8 py-20 text-center">
                     <div className="flex flex-col items-center justify-center">
-                      <div className="text-4xl mb-4 opacity-20">🔍</div>
+                      <div className="text-4xl mb-4 opacity-20">Search</div>
                       <p className="text-slate-500 font-bold uppercase tracking-widest text-xs italic">No matching pet owners found</p>
                     </div>
                   </td>
@@ -270,7 +262,7 @@ const Customers = () => {
                       {customerProfile.pets?.map(pet => (
                         <div key={pet.pet_id} className="card p-6 bg-white border-slate-100 hover:border-accent-100 transition-colors flex items-start group">
                           <div className="text-4xl mr-5 group-hover:scale-110 transition-transform duration-300 shadow-inner bg-slate-50 p-3 rounded-2xl border border-white">
-                            {pet.pet_type === 'dog' ? '🐶' : '🐱'}
+                            {pet.pet_type === 'dog' ? 'Dog' : 'Cat'}
                           </div>
                           <div>
                             <p className="font-extrabold text-slate-900 text-lg">{pet.pet_name}</p>
@@ -303,12 +295,12 @@ const Customers = () => {
                               <div>
                                 <p className="text-sm font-bold text-slate-900 line-clamp-1">{order.product_name}</p>
                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-                                  {order.product_category} • {format(new Date(order.ordered_at), 'MMM d')}
+                                  {order.product_category} - {format(new Date(order.ordered_at), 'MMM d')}
                                 </p>
                               </div>
                             </div>
                             <div className="text-right">
-                              <span className="font-black text-slate-900 text-sm">₹{order.amount}</span>
+                              <span className="font-black text-slate-900 text-sm">Rs. {order.amount}</span>
                             </div>
                           </div>
                         ))}

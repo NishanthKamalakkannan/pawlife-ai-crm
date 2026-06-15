@@ -113,7 +113,7 @@ const NewCampaign = () => {
         sample_product: 'Premium Food',
       });
       setMessage(res.data.message);
-    } catch (error) {
+    } catch {
       toast.error('Failed to generate message');
     } finally {
       setIsGeneratingMsg(false);
@@ -162,7 +162,7 @@ const NewCampaign = () => {
       setLiveStats(campRes.data.stats);
       setStep(4);
       setTimeout(() => navigate(`/campaigns/${campaignId}`), 5000);
-    } catch (error) {
+    } catch {
       toast.error('Failed to launch campaign');
       setIsLaunching(false);
     }
@@ -409,7 +409,7 @@ const NewCampaign = () => {
                   <div className="w-16 h-1 bg-slate-100 rounded-full"></div>
                 </div>
                 <div className="flex items-center mb-6 gap-3">
-                  <div className="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center text-[10px] font-black text-white px-1">🐾</div>
+                  <div className="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center text-[10px] font-black text-white px-1">PL</div>
                   <div>
                     <span className="font-black text-[11px] text-slate-900 uppercase tracking-[0.1em] block">PawLife CRM</span>
                     <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Digital Assistant</span>
@@ -452,14 +452,14 @@ const NewCampaign = () => {
       {step === 4 && (
         <div className="card p-20 text-center animate-fade-in flex flex-col items-center relative overflow-hidden shadow-[0_40px_80px_-15px_rgba(30,27,75,0.1)] border-none ring-1 ring-accent-50 rounded-[3rem]">
           <div className="absolute inset-0 pointer-events-none opacity-40">
-            {['🎾', '🐾', '🏠', '🦴', '🧡'].map((emoji, i) => (
+            {['Toys', 'PL', 'Home', 'Treats', 'Care'].map((emoji, i) => (
               <span key={i} className="absolute text-3xl animate-bounce" style={{ left: `${5 + i * 22}%`, top: `${15 + (i % 3) * 20}%`, animationDelay: `${i * 0.2}s` }}>{emoji}</span>
             ))}
           </div>
           <div className="w-32 h-32 bg-emerald-50 rounded-[3rem] flex items-center justify-center mb-8 relative z-10 shadow-inner group">
             <CheckCircle className="w-16 h-16 text-emerald-500 transition-transform duration-500 group-hover:rotate-[360deg]" />
           </div>
-          <h2 className="text-4xl font-black text-slate-900 mb-4 relative z-10 tracking-tight">Active Deployment! ✨</h2>
+          <h2 className="text-4xl font-black text-slate-900 mb-4 relative z-10 tracking-tight">Active Deployment! AI</h2>
           <p className="text-lg text-slate-500 mb-12 max-w-md mx-auto relative z-10 font-bold leading-relaxed">
             Messaging {audienceResult?.count} users via {channel}. Stand by for performance telemetry.
           </p>

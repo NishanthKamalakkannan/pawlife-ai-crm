@@ -90,29 +90,6 @@ const CampaignDetail = () => {
     }
   };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'completed': return 'text-success bg-success/10 border-success/20';
-      case 'sending': return 'text-blue-600 bg-blue-50 border-blue-200';
-      default: return 'text-slate-600 bg-slate-100 border-slate-200';
-    }
-  };
-
-  const getMsgStatusBadge = (status) => {
-    const styles = {
-      delivered: 'bg-blue-100 text-blue-700',
-      opened: 'bg-green-100 text-green-700',
-      clicked: 'bg-accent-100 text-accent-800',
-      failed: 'bg-red-100 text-red-700',
-      sent: 'bg-slate-100 text-slate-700',
-    };
-    return (
-      <span className={`px-2 py-0.5 text-xs rounded capitalize ${styles[status] || 'bg-slate-100 text-slate-500'}`}>
-        {status}
-      </span>
-    );
-  };
-
   const stats = campaign.stats || {};
   const totalSent = stats.sent || 0;
   const openRate = totalSent > 0 ? Math.round((stats.opened || 0) / totalSent * 100) : 0;

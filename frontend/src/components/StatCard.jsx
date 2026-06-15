@@ -13,7 +13,7 @@ const StatCard = ({ title, value, icon: Icon, trend }) => {
       {trend && (
         <div className="flex items-center">
           <span className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-50 text-emerald-600 text-[10px] font-bold mr-2">
-            ↑
+            Up
           </span>
           <p className="text-sm font-semibold text-emerald-600">
             {trend} <span className="text-slate-400 font-normal ml-1">vs last month</span>

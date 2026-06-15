@@ -8,7 +8,7 @@ const DashboardChat = () => {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'assistant', text: 'Ask me anything about your customers — cities, overdue restocks, pet types, and more.' },
+    { role: 'assistant', text: 'Ask me anything about your customers - cities, overdue restocks, pet types, and more.' },
   ]);
 
   const handleSubmit = async (e) => {
