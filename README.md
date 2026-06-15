@@ -1,12 +1,12 @@
 # PawLife - AI-Native Mini CRM
 
-**[🔗 Live Demo (Hosted URL)](#)** | **[🎥 Walkthrough Video](#)**
+**[🔗 Live Demo (Hosted URL)](#)** | **[🎥 Walkthrough Video](https://drive.google.com/file/d/1zjTreSmUsHou0ygBGxFaT-oTRAdCTUsK/view?usp=drive_link)**
 
 A marketing CRM for **PawLife**, an Indian D2C pet care brand. Helps marketers decide **who to reach**, **what to say**, and **which channel** to use - with AI woven into every step.
 
 ## Product POV
 
-**AI campaign copilot** - autopilot surfaces opportunities from customer data, AI finds audiences and writes copy, marketer reviews and launches, system tracks live delivery via a callback-driven channel loop.
+**AI campaign copilot** - autopilot surfaces opportunities from customer data, AI finds audiences and writes copy, marketer reviews and launches, system tracks live delivery via a callback-driven channel stub.
 
 ## Architecture
 
@@ -97,4 +97,3 @@ pawlife/
 
 - CRM: `GET /api/health`
 - Channel: `GET /health`
-
