@@ -33,7 +33,10 @@ logger = logging.getLogger(__name__)
 MONGO_URL = os.getenv("MONGO_URL")
 DB_NAME = os.getenv("DB_NAME", "pawlife")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-CHANNEL_SERVICE_URL = os.getenv("CHANNEL_SERVICE_URL", "http://localhost:8001")
+CHANNEL_SERVICE_URL = os.getenv(
+    "CHANNEL_SERVICE_URL", 
+    "https://pawlife-channel.onrender.com" if os.getenv("RENDER") else "http://localhost:8001"
+)
 
 app = FastAPI(title="PawLife CRM API")
 
